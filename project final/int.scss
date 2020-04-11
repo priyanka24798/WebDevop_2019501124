@@ -1,0 +1,11 @@
+%message{
+
+    color: blue;
+    text-align: center;
+}
+.card-text{
+    @extend %message;
+}
+
+
+

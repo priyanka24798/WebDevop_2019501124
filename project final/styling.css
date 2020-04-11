@@ -1,0 +1,106 @@
+.jumbotron{
+    padding: 20px;
+    background-image: url(pics/bg.jpg);
+}
+.display-4{
+    color: aliceblue;
+    font: bold;
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.lead{
+    color: antiquewhite;
+    text-align: center;
+    font-variant: initial;
+    font-family: cursive;
+}
+h1{
+    color: rgb(226, 226, 216);
+    font: italic;
+    font-family: 'Franklin Gothic Medium';
+}
+h2{
+    color: rgb(99, 231, 231);
+    
+}
+h3{
+    color: rgb(245, 195, 104);
+    font-size: x-large;
+}
+figure{
+    float: right;
+    padding-right: 15px;
+    padding-bottom: 50px;
+}
+.card-body 
+.para1{
+font-style:normal;
+font: 200;
+height : 150;
+width: 70;
+font-size: large;
+background-color: rgba(0, 0, 0, 0);
+
+} 
+.card{
+
+}
+.card-body h4{
+color: rgb(127, 16, 231);
+font:bold;
+font-family:'Arial Narrow Bold';
+}
+.para2{
+font-style:normal;
+font: 200;
+height : 150;
+width: 70;
+font-size: large;
+background-color: rgba(0, 0, 0, 0);
+
+}
+.para3{
+font-style:normal;
+font: 200;
+height : 150;
+width: 70;
+font-size: large;
+background-color: rgba(0, 0, 0, 0);
+}
+.card-deck{
+padding-left: 100px;
+padding-right: 100px;
+}
+.b1{
+padding-left: 100px;
+align-items: center;
+
+}
+.b2{
+padding-left: 100px;
+
+}
+.b3{
+padding-left: 100px;
+
+}
+.b4{
+padding-left: 100px;
+
+}
+.alert h3{
+color: black;
+font: bold;
+font-weight: 900;
+
+
+}
+ul li{
+color: aliceblue;
+}
+@media(max-width: 500px){
+    .jumbotron{
+        color: rgb(164, 164, 238);
+    }
+}
+

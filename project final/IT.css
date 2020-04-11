@@ -1,0 +1,28 @@
+h1 {
+  color: #09096e;
+  font-style: italic;
+  text-align-last: center;
+  font-weight: bold;
+  background-image: url(pics/it2bg.jpg);
+}
+
+h3 {
+  color: #09096e;
+  font-weight: bold;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-style: oblique;
+}
+
+h2 {
+  font-size: medium;
+  font-weight: 800;
+}
+
+ul li {
+  font: bold;
+  font-size: large;
+  color: #7c1717;
+  font-weight: bold;
+}
+
+/*# sourceMappingURL=IT.css.map */
