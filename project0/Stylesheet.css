@@ -1,0 +1,93 @@
+h1{
+    color: blue;
+    text-align: center;
+    height: 150;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-style: oblique;
+    font: bold;
+
+}
+
+.link1{
+    color: rgb(44, 3, 3);
+}
+
+.lead{
+    color:rgb(34, 1, 1);
+    font-style: italic;
+    font: bold;
+    width: max-content;
+    height: 400;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: xx-large;
+
+}
+h2, div{
+    color: brown;
+    font-style: italic;
+    text-align: center;
+    font: bold;
+    font-family: cursive;
+
+    /* background-color: beige; */
+}
+figure{
+    align-items: center;
+
+}
+h4 {
+    font-weight: bold;
+    font-style: oblique;
+    font-size:large;
+    
+    
+}
+h3{
+    color: rgb(161, 8, 84);
+    font-weight: bold;
+    font-style: oblique;
+    font-size:large;
+    font-family:Haettenschweiler;
+}
+.para1{
+    font-style:normal;
+    font: 200;
+    height : 150;
+    width: 70;
+    font-size: large;
+    background-color: rgba(0, 0, 0, 0);
+
+} 
+.para2{
+    font-style:normal;
+    font: 200;
+    height : 150;
+    width: 70;
+    font-size: large;
+    background-color: rgba(0, 0, 0, 0);
+
+}
+.para3{
+    font-style:normal;
+    font: 200;
+    height : 150;
+    width: 70;
+    font-size: large;
+    background-color: rgba(0, 0, 0, 0);
+}
+ul li{
+    color: rgb(3, 36, 37);
+    font-size: xx-large    ;
+    font-kerning: initial;
+    font-family: fantasy;
+
+}
+.align{
+    align-items: center;
+}
+
+@media print{
+    .intro{
+        display: none;
+    }
+}

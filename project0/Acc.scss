@@ -1,0 +1,10 @@
+// inheritance
+
+.name{
+
+    color: blue($color: #1309a0);
+}
+
+h3{
+    @extend .name;
+}
