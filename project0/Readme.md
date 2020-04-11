@@ -13,7 +13,7 @@ In this home page I have used Bootstrap for main heading and created four hyperl
 option 1
 option 2
 option 3
-option 4
+
 
 when we click on each option, it redirects to the other html pages and I have also added back button 
 in other html pages so that user can get back to main home page
