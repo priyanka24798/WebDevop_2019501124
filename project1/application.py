@@ -54,4 +54,22 @@ def register():
         except Exception:
             return render_template("error.html")
     return render_template("registration.html")
-        
+
+@app.route("/admin")
+def users():
+    r = database.query.all()
+    return render_template("admin.html",register= r)      
+
+
+@app.route("/auth",methods = ["GET","POST"])
+def authenticate():
+    database.query.all()
+    name = request.form.get("username")
+    email = request.form.get("email-id")
+    log = database(name =  name ,email = email)
+    try:
+        Member = db.session.query(database).filter(database.email == email).all()
+        print(Member[0].name)
+        return render_template("user.html",f= name,email = email)  
+    except Exception:
+        return render_template("error.html")
