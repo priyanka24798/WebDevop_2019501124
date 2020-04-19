@@ -65,8 +65,8 @@ def index():
         username = session['username']
         return 'You are Logged in as ' + username + '<br>' + \
          "<b><a href = '/logout'>click here to log out</a></b>"
-    return "You are not logged in <br><a href = '/login'></b>" + \
-      "click here to log in</b></a>"
+   
+    return redirect(url_for('register'))
    
 
 
@@ -75,15 +75,18 @@ def authenticate():
     database.query.all()
     name = request.form.get("username")
     email = request.form.get("email-id")
-    log = database(name =  name ,email = email)
-    try:
-        Member = db.session.query(database).filter(database.email == email).all()
-        print(Member[0].name)
-        session['username'] = request.form.get("email-id")
-        # return render_template("user.html",f= name,email = email)  
-        return redirect(url_for('index'))
-    except Exception:
-        return render_template("error.html")
+    password = request.form.get("password")
+    # member = db.session.query(database).filter_by(database.email == email).all()
+    member = database.query.filter_by(email = email).first()
+
+    if member is not None:
+        if ((member.password == password and member.email == email) and member.name == name):
+            session['username'] = request.form.get("email-id")
+            return redirect(url_for('index'))
+        else:
+            return render_template("registration.html", message = "Invalid credentials!")
+    else:
+        return render_template("registration.html", message = "Account does not exists..Please register!! ")
 
 
 @app.route("/logout")
