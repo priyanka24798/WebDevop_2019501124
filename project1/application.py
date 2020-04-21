@@ -49,7 +49,7 @@ def register():
             print(name)
             print(password)
             print(email)
-            return render_template("show.html", name=name)
+            return render_template("registration.html", message = "Congratulation, you have successfully registered..you can now login..!")
         except Exception:
             return render_template("error.html")
     return render_template("registration.html")
@@ -63,9 +63,7 @@ def users():
 def index():
     if 'username' in session:
         username = session['username']
-        return 'You are Logged in as ' + username + '<br>' + \
-         "<b><a href = '/logout'>click here to log out</a></b>"
-   
+        return render_template ("user.html", message= "You are Logged in as " + username)
     return redirect(url_for('register'))
    
 

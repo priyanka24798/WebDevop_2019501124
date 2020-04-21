@@ -23,14 +23,19 @@
 
 
         }
+        .button{
+            background-color: brown;
+
+        }
     </style>
 </head>
 <body>
     <h1> Successfully logged in ..!</h1>
     <p></p>
-    <h2> Hi {{name}}</h2>
+    <p style="color:red;text-align: center;">{{message}}</p>
+    <h2> Hello..</h2>
     <form action="/registration" class="inline">
-        <button class="float-center submit-button" >Logout</button>
+        <button class="btn btn-primary" >Logout</button>
     </form>
 
 </body>
