@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <!-- <link rel = "stylesheet" type="text/css" href="style.css"> -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        body{
+            background: rgb(245, 244, 240);
+    
+}
+.jumbotron{
+    padding-left: 150px;
+    padding-right: 150px;
+    background-color: rgb(230, 186, 132);
+
+}
+.display-4{
+    color: rgb(2, 7, 8);
+    font: bold;
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.lead{
+    color: rgb(129, 23, 7);
+    text-align: center;
+    font-variant: initial;
+    font-family: cursive;
+}
+#loginbox{
+    position: relative;
+    margin: 2% auto;
+    height: 400px;
+    background: #fff;
+    width: 600px;
+    height: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
+}
+.left-box{
+    position:absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    padding: 40px;
+    width: 300px;
+    height: 500px;
+
+}
+h1{
+    
+    font-weight: 900;
+    text-align: center;
+    color: #efefef;
+}
+
+.form-group input[type="submit"]{
+    margin-bottom: 28px;
+    width: 120px;
+    height: 32px;
+    background: #f44336;
+    border: none;
+    border-radius: 2px;
+    color: #fff;
+    font-family: sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: 0.2s ease;
+    cursor: pointer;
+
+}
+.form-row{
+    padding: 50px;
+}
+.box{
+    align-self: center;
+    text-align: center;
+}
+
+    </style>
+    
+
+        
+   
+</head>
+<body>
+    <div class="jumbotron">
+        <h1 class="display-4"> Welcome to Registration </h1>
+        <p class="lead">Are you a new user ??</p>
+        <hr class="my-4">
+        <p class = "box" >
+        <a class="btn btn-primary" href="#" role="button">Signup for free..!</a></p>
+      </div>
+
+    <div id= "loginbox">
+        <form action ="{{url_for('register')}}" method="post">
+            <p style="color:red;text-align: center;">{{message}}</p>
+            
+            <div class="form-row">
+              <div class="col">
+                <label for="exampleinput">Name</label>
+                <input type="text" class="form-control" name="username" placeholder="Your name please" required>
+                <p></p>
+                <label for="exampleInput">Email-id</label>
+                <input type="text" class="form-control" name="email-id" placeholder="sample@example.com" required>
+                <p></p>
+                <label for="exampleInput">Password</label>
+                <input type="password" class="form-control" name="password" placeholder="Must be 8 characters" required>
+                <p></p>
+                <label for="exampleInput"> Retype - Password</label>
+                <input type="password" class="form-control" placeholder="Must be 8 characters">
+                <p></p>
+                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                <p></p>
+                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" formaction="auth" value="Login" class="btn btn-primary">Login</button>
+
+                
+
+              </div>
+              
+            </div>
+        </form>
+
+    </div>
+
+    
+    
+</body>
+</html>
