@@ -27,15 +27,24 @@
         position: relative;
         margin: 10% auto;
         background: #fff;
-        width: 600px;
-        height: 200px;
+        width: 400px;
+        height: 300px;
         box-shadow: 0 8px 10px rgba(0, 0, 0, 0.6);
         }
         .row{
-            padding: 50px;
+            padding-left: 500px;
+            padding-right: 500px;
         }
         #log{
            align-self: flex-end;
+        }
+        .selection{
+            padding-left: 690px;
+            
+        }
+        .form-group h4{
+            text-align: center;
+
         }
         
     </style>
@@ -44,30 +53,36 @@
     <p></p>
     <h1> Hello..!! Welcome to our book review site</h1>
     <p></p>
-    <p style="color:rgb(244, 246, 247);text-align: center;">{{message}}</p>
-    <div id= "loginbox">
-       
-            <form action ="{{url_for('search')}}" method="post">
-            <div class="row">
-              <div class="col">
-                <input type="text" class="form-control" name= "isbn" placeholder="Search with ISBN">
-              </div>
-              <div class="col">
-                <input type="text" class="form-control" name= "tittle" placeholder="Search with tittle/Author">
-              </div>
-            </div>
-            <p class = "box" >
-                <button type="submit"  value="Login" class="btn btn-primary">Search</button>
-          </form>
-          
-      
-
-    </div>
-
     <form action="/registration" class="inline">
-        <button class="btn btn-danger" id = "log" >Logout</button>
+        <button class="btn btn-danger float-right" id = "log" >Logout</button>
     </form>
+    <p style="color:rgb(244, 246, 247);text-align: center;">{{message}}</p>
+    
+    <!-- <div id= "loginbox"> -->
+       
+        <form action ="{{url_for('search')}}" method="post">
+            <div  class = "selection">
+            <input type="radio" id="option1" name="isbnsearch" value="option1">
+            <label for="search1">Search by ISBN</label><br>
 
+            <input type="radio" id="option2" name="titlesearch" value="option2">
+            <label for="search2">Search by Title</label><br>
+
+            <input type="radio" id="option3" name="authorsearch" value="option3">
+            <label for="search3">Search by Author</label>
+            </div>
+
+            <div class="row">
+            <label for="exampleInputEmail1"><h4>Search for Books</h4></label>
+            <input type="text" class="form-control" name="search" placeholder=" Enter Title, ISBN, or Author">
+            </div>
+            <p></p>
+            <p class = "box" >
+                <button type="submit" formaction="Search" value="Login" class="btn btn-primary">Search</button>
+           
+            
+          </form>
+          </div>
 
 </body>
 </html>

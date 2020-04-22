@@ -93,24 +93,28 @@ def authenticate():
 
 @app.route('/Search', methods=["GET","POST"])
 def search():
-    Books.query.all()
     
-    isbn = request.form.get("isbn")
-    tittle = request.form.get("tittle")
-    author = request.form.get("author")
-    print("isbn:",isbn)
-    print("tittle is:",tittle)
-    # mem = Books.query.filter_by(isbn = isbn).first()
-    
-    mem = db1.session.query(Books).filter(Books.isbn == isbn).all()
-    print(mem)
+    if(request.method == "POST"):
+        book_search = request.form.get("search")
+        
+        if request.form.get("isbnsearch") == "option1":
+            print(book_search +" like  "+"isbnsearch")
+            s = Books.query.filter(Books.isbn.like('%'+ book_search +'%')).all()
+            print(s)
+            return render_template("Books.html", Books = s)
 
-
-    # m = Books.query.filter_by(isbn = isbn).first()
-    # s = db1.session.query(Books).filter(or_(Books.isbn==isbn,Books.tittle==tittle,Books.author==author)).all()
-    # print(s)
-    return render_template("Books.html", Books = mem)
-
+        elif request.form.get("titlesearch") == "option2":
+            print(book_search +" like   "+"titlesearch")
+            s = db1.session.query(Books).filter((Books.tittle.like('%'+ book_search +'%')))
+            print(s)
+            return render_template("Books.html", Books = s)
+       
+        else:
+            s = db1.session.query(Books).filter((Books.author.like('%'+ book_search +'%')))
+            print(s)
+            return render_template("Books.html", Books = s)
+    else:
+        return render_template("user.html", message= "No books found.!")
 
 
 
