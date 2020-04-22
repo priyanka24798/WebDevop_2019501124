@@ -8,35 +8,66 @@
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <style>
         body{
-            background-color: rgb(238, 192, 210);
+            /* background-color: rgb(148, 126, 135); */
+            background: url('/static/img/bg.jpeg');
         }
         h1{
             text-align: center;
-            color: rgb(20, 31, 2);
+            color: rgb(224, 93, 6);
             font-style: italic;
-        }
-        h2{
-            color: brown;
-            font-size: xx-large;
-            text-align: center;
             font-weight: 900;
-
+        }
+        
+        .box{
+            align-self: center;
+            text-align: center;
 
         }
-        .button{
-            background-color: brown;
-
+        #loginbox{
+        position: relative;
+        margin: 10% auto;
+        background: #fff;
+        width: 600px;
+        height: 200px;
+        box-shadow: 0 8px 10px rgba(0, 0, 0, 0.6);
         }
+        .row{
+            padding: 50px;
+        }
+        #log{
+           align-self: flex-end;
+        }
+        
     </style>
 </head>
 <body>
-    <h1> Successfully logged in ..!</h1>
     <p></p>
-    <p style="color:red;text-align: center;">{{message}}</p>
-    <h2> Hello..</h2>
+    <h1> Hello..!! Welcome to our book review site</h1>
+    <p></p>
+    <p style="color:rgb(244, 246, 247);text-align: center;">{{message}}</p>
+    <div id= "loginbox">
+       
+            <form action ="{{url_for('search')}}" method="post">
+            <div class="row">
+              <div class="col">
+                <input type="text" class="form-control" name= "isbn" placeholder="Search with ISBN">
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" name= "tittle" placeholder="Search with tittle/Author">
+              </div>
+            </div>
+            <p class = "box" >
+                <button type="submit"  value="Login" class="btn btn-primary">Search</button>
+          </form>
+          
+      
+
+    </div>
+
     <form action="/registration" class="inline">
-        <button class="btn btn-primary" >Logout</button>
+        <button class="btn btn-danger" id = "log" >Logout</button>
     </form>
+
 
 </body>
 </html>

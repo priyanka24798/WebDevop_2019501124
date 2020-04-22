@@ -8,17 +8,20 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from database import *
 from datetime import datetime
+from booksimport import *
+from sqlalchemy import or_
 
 
 app = Flask(__name__)
+# app1 = Flask(__name__)
 
 
-# # Check for environment variable
-# if not os.getenv("DATABASE_URL"):
-#     raise RuntimeError("DATABASE_URL is not set")
+# Check for environment variable
+if not os.getenv("DATABASE_URL"):
+    raise RuntimeError("DATABASE_URL is not set")
 
-# # app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
-# # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+# app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+# app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Configure session to use filesystem
 # app.config["SESSION_PERMANENT"] = False
@@ -31,6 +34,7 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
+# db1.init_app(app1)
 app.secret_key= "log-in"
 
 
@@ -70,7 +74,7 @@ def index():
 
 @app.route("/auth",methods = ["GET","POST"])
 def authenticate():
-    database.query.all()
+    # database.query.all()
     name = request.form.get("username")
     email = request.form.get("email-id")
     password = request.form.get("password")
@@ -80,11 +84,34 @@ def authenticate():
     if member is not None:
         if ((member.password == password and member.email == email) and member.name == name):
             session['username'] = request.form.get("email-id")
-            return redirect(url_for('index'))
+            return render_template("user.html")
         else:
             return render_template("registration.html", message = "Invalid credentials!")
     else:
         return render_template("registration.html", message = "Account does not exists..Please register!! ")
+
+
+@app.route('/Search', methods=["GET","POST"])
+def search():
+    Books.query.all()
+    
+    isbn = request.form.get("isbn")
+    tittle = request.form.get("tittle")
+    author = request.form.get("author")
+    print("isbn:",isbn)
+    print("tittle is:",tittle)
+    # mem = Books.query.filter_by(isbn = isbn).first()
+    
+    mem = db1.session.query(Books).filter(Books.isbn == isbn).all()
+    print(mem)
+
+
+    # m = Books.query.filter_by(isbn = isbn).first()
+    # s = db1.session.query(Books).filter(or_(Books.isbn==isbn,Books.tittle==tittle,Books.author==author)).all()
+    # print(s)
+    return render_template("Books.html", Books = mem)
+
+
 
 
 @app.route("/logout")
