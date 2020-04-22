@@ -1,4 +1,5 @@
 import os
+from models import*
 
 from flask import Flask, session, request, url_for
 from flask import redirect
@@ -91,3 +92,11 @@ def authenticate():
 def logout():
     session.clear()
     return render_template("registration.html")
+
+@app.route("/bookpage", methods =  ["GET"])
+def books():
+    # ISBN = request.form.get("ISBN")
+    isbn = "0553803700"
+    details =  Books.query.filter_by(isbn = isbn)
+    return render_template("bookpage.html",data=details)
+

@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <title>My Website!</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <style> 
+            body {
+                background-color: skyblue;
+            }
+            h1,h2 {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Book Details</h1>
+        &emsp;
+        {% for book in data %}
+            <h2>{{"isbn"}} :: {{book.isbn}}</h2>
+            <h2>{{"title"}} :: {{book.tittle}}</h2>
+            <h2>{{"author"}} :: {{book.author}}</h2>
+            <h2>{{"year"}} :: {{book.year}}</h2>
+        {% endfor %}
+    </body>
+</html>
