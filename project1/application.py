@@ -67,6 +67,8 @@ def users():
 def index():
     if 'username' in session:
         username = session['username']
+
+        
         return render_template ("user.html", message= "You are Logged in as " + username)
     return redirect(url_for('register'))
    
@@ -101,24 +103,25 @@ def search():
             print(book_search +" like  "+"isbnsearch")
             s = Books.query.filter(Books.isbn.like('%'+ book_search +'%')).all()
             print(s)
-            return render_template("Books.html", Books = s)
+            return render_template("user.html", Books = s)
 
         elif request.form.get("titlesearch") == "option2":
             print(book_search +" like   "+"titlesearch")
             s = db1.session.query(Books).filter((Books.tittle.like('%'+ book_search +'%')))
             print(s)
-            return render_template("Books.html", Books = s)
+            return render_template("user.html", Books = s)
        
-        else:
+        elif request.form.get("authorsearch") == "option3":
+            print(book_search +" like   "+"authorsearch")
             s = db1.session.query(Books).filter((Books.author.like('%'+ book_search +'%')))
             print(s)
-            return render_template("Books.html", Books = s)
-    else:
+            return render_template("user.html", Books = s)
         return render_template("user.html", message= "No books found.!")
+    return render_template("user.html")
 
 
 
 @app.route("/logout")
-def logout():
-    session.clear()
+def logout(): 
+    session.pop('username', None)
     return render_template("registration.html")
