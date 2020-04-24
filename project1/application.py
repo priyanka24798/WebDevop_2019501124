@@ -8,7 +8,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from database import *
 from datetime import datetime
-
+from review import *
 
 app = Flask(__name__)
 
@@ -46,9 +46,9 @@ def register():
         try:
             db.session.add(register)
             db.session.commit()
-            print(name)
-            print(password)
-            print(email)
+            # print(name)
+            # print(password)
+            # print(email)
             return render_template("registration.html", message = "Congratulation, you have successfully registered..you can now login..!")
         except Exception:
             return render_template("error.html")
@@ -91,3 +91,23 @@ def authenticate():
 def logout():
     session.clear()
     return render_template("registration.html")
+
+@app.route('/review', methods =['GET','POST'])
+def review():
+    if request.method == 'POST':
+        rating = request.form.get('review_tags')
+        review = request.form.get('review_value')
+        email = 'satish'
+
+        if (REVIEW.query.filter_by(email = email, isbn = "1234").first() == None) :
+            data = REVIEW(email = email, isbn = "1234", rating = rating, review = review) 
+            db1.session.add(data)
+            db1.session.commit()
+        else:
+            total_reviews = db1.session.query(REVIEW).filter(REVIEW.isbn == "1234")
+            return render_template('review.html',message = 'You have already given review',total_reviews=total_reviews,isbn = "1234")
+    total_reviews = db1.session.query(REVIEW).filter(REVIEW.isbn == "1234")
+    return render_template('review.html', message1 = 'review submitted succesfully.',total_reviews=total_reviews,isbn = "1234")
+
+
+    
