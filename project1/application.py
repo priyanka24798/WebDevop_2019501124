@@ -109,5 +109,3 @@ def review():
     total_reviews = db1.session.query(REVIEW).filter(REVIEW.isbn == "1234")
     return render_template('review.html', message1 = 'review submitted succesfully.',total_reviews=total_reviews,isbn = "1234")
 
-
-    
