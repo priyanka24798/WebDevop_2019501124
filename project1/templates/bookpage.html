@@ -4,7 +4,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <style> 
             body {
-                background-color: skyblue;
+                background-color:skyblue;
                 margin-left: 20%;
                 margin-right: 20%;
             }
@@ -22,7 +22,7 @@
     <body>
         <h1>Book Details</h1>
         &emsp;
-        <table class="table table-hover table-dark">
+        <table class="table table-striped">
             <thead class="thead-dark">
               <tr>
                 <th scope="col">Details</th>
@@ -47,10 +47,14 @@
                 <td>Published</td>
                 <td>{{book.year}}</td>
             </tr>
-            {% endfor %}
-    
-             
+            {% endfor %}      
             </tbody>
-          </table>
+
+            {% for item in result %}
+                {{item.isbn}}
+                {{item.email}}
+                {{item.rating}}
+                {{item.review}}
+            {% endfor %}
     </body>
 </html>

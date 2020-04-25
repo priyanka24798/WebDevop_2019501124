@@ -93,10 +93,19 @@ def logout():
     session.clear()
     return render_template("registration.html")
 
-@app.route("/bookpage", methods =  ["GET"])
-def books():
-    # ISBN = request.form.get("ISBN")
-    isbn = "0553803700"
-    details =  Books.query.filter_by(isbn = isbn)
-    return render_template("bookpage.html",data=details)
+# @app.route("/bookpage/<string:isbn_id>")
+# def book_details(isbn_id):
+#     book = db1.session.query(Books).filter(Books.isbn == isbn_id).all()
+#     return render_template("bookpage.html", data=book)
 
+@app.route("/bookpage/<string:isbn>")
+def books(isbn):
+    # ISBN = Books.query.get("isbn")
+    isbn = "1416949658"
+    details =  Books.query.filter_by(isbn = ISBN)
+    review = "SELECT * FROM REVIEW WHERE isbn = 1234"
+    return render_template("bookpage.html",data=details, result = review)
+
+
+
+   
