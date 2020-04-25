@@ -103,8 +103,8 @@ def books(isbn):
     # ISBN = Books.query.get("isbn")
     isbn = "1416949658"
     details =  Books.query.filter_by(isbn = ISBN)
-    review = "SELECT * FROM REVIEW WHERE isbn = 1234"
-    return render_template("bookpage.html",data=details, result = review)
+    # review = "SELECT * FROM REVIEW WHERE isbn = 1234"
+    return render_template("bookpage.html",data=details)
 
 
 
