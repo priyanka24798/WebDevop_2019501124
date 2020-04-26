@@ -10,6 +10,7 @@ from database import *
 from datetime import datetime
 from booksimport import *
 from sqlalchemy import or_
+from bookreview import *
 
 
 app = Flask(__name__)
@@ -68,7 +69,7 @@ def index():
     if 'username' in session:
         username = session['username']
 
-        
+
         return render_template ("user.html", message= "You are Logged in as " + username)
     return redirect(url_for('register'))
    
@@ -92,16 +93,15 @@ def authenticate():
     else:
         return render_template("registration.html", message = "Account does not exists..Please register!! ")
 
-
 @app.route('/Search', methods=["GET","POST"])
 def search():
     
     if(request.method == "POST"):
         book_search = request.form.get("search")
-        
+
         if request.form.get("isbnsearch") == "option1":
             print(book_search +" like  "+"isbnsearch")
-            s = Books.query.filter(Books.isbn.like('%'+ book_search +'%')).all()
+            s = Books.query.filter(Books.isbn.like( book_search +'%')).all()
             print(s)
             return render_template("user.html", Books = s)
 
@@ -109,6 +109,7 @@ def search():
             print(book_search +" like   "+"titlesearch")
             s = db1.session.query(Books).filter((Books.tittle.like('%'+ book_search +'%')))
             print(s)
+
             return render_template("user.html", Books = s)
        
         elif request.form.get("authorsearch") == "option3":
@@ -118,7 +119,6 @@ def search():
             return render_template("user.html", Books = s)
         return render_template("user.html", message= "No books found.!")
     return render_template("user.html")
-
 
 
 @app.route("/logout")
