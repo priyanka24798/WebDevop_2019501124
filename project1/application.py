@@ -98,8 +98,8 @@ def review():
         rating = request.form.get('review_tags')
         review = request.form.get('review_value')
         email = 'satish'
-
-        if (REVIEW.query.filter_by(email = email, isbn = "1234").first() == None) :
+        isbn = "1234"
+        if (REVIEW.query.filter_by(email = email, isbn = isbn).first() == None) :
             data = REVIEW(email = email, isbn = "1234", rating = rating, review = review) 
             db1.session.add(data)
             db1.session.commit()
