@@ -73,8 +73,6 @@ def index():
         return render_template ("user.html", message= "You are Logged in as " + username)
     return redirect(url_for('register'))
    
-
-
 @app.route("/auth",methods = ["GET","POST"])
 def authenticate():
     # database.query.all()
@@ -94,12 +92,15 @@ def authenticate():
         return render_template("registration.html", message = "Account does not exists..Please register!! ")
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 @app.route("/bookpage/<string:isbn_id>")
 def book_details(isbn_id):
     book = db1.session.query(Books).filter(Books.isbn == isbn_id).all()
     return render_template("bookpage.html", data=book)
 =======
+=======
+>>>>>>> master
 @app.route('/Search', methods=["GET","POST"])
 def search():
     
@@ -120,6 +121,7 @@ def search():
         return render_template("user.html", message= "No books found.!")
     return render_template("user.html")
 
+<<<<<<< HEAD
 @app.route("/bookpage/<string: isbn_id>")
 def book_details(isbn_id):
     book = db1.session.query(Books).filter(Books.isbn == isbn_id).all()
@@ -127,11 +129,14 @@ def book_details(isbn_id):
         
 >>>>>>> 5acbc0c81aac67cf749de6a66ac39481a297ae64
 
+=======
+>>>>>>> master
 
 @app.route("/logout")
 def logout(): 
     session.pop('username', None)
-    return render_template("registration.html")
+<<<<<<< HEAD
+
 <<<<<<< HEAD
 
 # @app.route("/bookpage")
@@ -149,3 +154,6 @@ def logout():
    
 =======
 >>>>>>> 5acbc0c81aac67cf749de6a66ac39481a297ae64
+=======
+    return render_template("registration.html")
+>>>>>>> master

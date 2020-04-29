@@ -9,13 +9,14 @@
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <style>
         body{
-            background: rgb(245, 244, 240);
+            background: url('/static/img/bg.jpeg');
     
 }
 .jumbotron{
-    padding-left: 150px;
-    padding-right: 150px;
+    padding-left: 50px;
+    padding-right: 50px;
     background-color: rgb(230, 186, 132);
+    height: 150px;
 
 }
 .display-4{
@@ -80,6 +81,40 @@ h1{
 }
 
     </style>
+
+    <script>
+        function registration()
+        
+	{
+        var x = document.forms["myform"]["username"].value;
+        if (x == "") {
+            alert("Name must be filled out");
+            return false;
+        }
+        var x = document.forms["myform"]["email-id"].value;
+        var checkemail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if (!checkemail.test(x))
+        {
+            alert("Invalid email-id");
+            return false;
+        }
+        var x = document.forms["myform"]["password"].value;
+        var checkpwd = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])/;
+        if (x == "") {
+            alert("Enter password please!");
+            return false;
+        }
+        else if(!checkpwd.test(x)){
+			alert ('Upper case, Lower case, Number and special character are required in Password filed');
+            return false;
+        }
+        else if(x.length <= 6)
+		{
+			alert ('Your password must be of 6 characters');
+            return false;
+		}
+    }
+    </script>
     
 
         
@@ -88,6 +123,7 @@ h1{
 <body>
     <div class="jumbotron">
         <h1 class="display-4"> Welcome to Registration </h1>
+        <p></p>
         <p class="lead">Are you a new user ??</p>
         <hr class="my-4">
         <p class = "box" >
@@ -95,27 +131,25 @@ h1{
       </div>
 
     <div id= "loginbox">
-        <form action ="{{url_for('register')}}" method="post">
+        <form action ="{{url_for('register')}}" name = "myform"  method="post">
             <p style="color:red;text-align: center;">{{message}}</p>
             
             <div class="form-row">
               <div class="col">
                 <label for="exampleinput">Name</label>
-                <input type="text" class="form-control" name="username" placeholder="Your name please" required>
+                <input type="text" class="form-control" name="username" id = "t1" placeholder="Your name please">
                 <p></p>
+               
                 <label for="exampleInput">Email-id</label>
-                <input type="text" class="form-control" name="email-id" placeholder="sample@example.com" required>
+                <input type="text" class="form-control" name="email-id" id = "t2" placeholder="sample@example.com" required>
                 <p></p>
                 <label for="exampleInput">Password</label>
-                <input type="password" class="form-control" name="password" placeholder="Must be 8 characters" required>
+                <input type="password" class="form-control" name="password" id = "t3" placeholder="Must be 8 characters" required>
                 <p></p>
                 <label for="exampleInput"> Retype - Password</label>
-                <input type="password" class="form-control" placeholder="Must be 8 characters">
+                <input type="password" class="form-control"  id = "t4" placeholder="Must be 6 characters" required>
                 <p></p>
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                <p></p>
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="btn btn-primary"  onclick ="registration()" >Register</button>
                 <button type="submit" formaction="auth" value="Login" class="btn btn-primary">Login</button>
 
                 

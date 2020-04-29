@@ -1,0 +1,62 @@
+<html>
+    <head>
+    </head>
+    <style>
+    table {
+            border: 2px solid black;
+            border-collapse: collapse;
+    }
+    td {
+        border: 2px solid black;
+        text-align:unset;
+    }
+    th {
+        border: 2px solid black;
+        background-color: lightblue;
+    }    
+    </style>
+    <body>
+        <form action="{{ url_for('review') }}" method="POST">
+            <div class="form-group">
+                <label for="Rating">Rating:</label>
+                <select class="form-control" name="review_tags" id="SearchType">
+                    <option value="None">None</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <input type="text" placeholder="Comment here" name="review_value" required style="width: 25%; margin-top: 20px;">
+                <button type="submit" form-action="search" class="searchbtn" value="searching">Submit</button><br>
+            </div>
+        </form>
+        {% if message %}
+        {{ message }}
+        {% endif %}
+        <br>
+        <br>
+        {% if message %}
+        {{message1}}
+        {% endif %}
+        <br>
+    {% if total_reviews %}
+        {% for k in total_reviews%}
+            <div class="reviews">
+                <table>
+                <tr>
+                    <th>Email</th>
+                    <th>Rating</th>
+                    <th>Review</th>
+                </tr>
+                <tr>
+                    <td> {{ k.email }}</td>
+                    <td> {{ k.rating }}</td>
+                    <td> {{ k.review }}</td>
+                </tr>
+                </table>
+            </div>
+        {% endfor %}
+    {% endif %}
+    </body>
+</html>
