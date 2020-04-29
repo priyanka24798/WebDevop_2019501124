@@ -90,7 +90,7 @@ def authenticate():
 
 @app.route("/logout")
 def logout():
-    session.clear()
+    session.pop('username', None)
     return render_template("registration.html")
 
 # @app.route("/bookpage/<string:isbn_id>")
