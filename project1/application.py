@@ -98,14 +98,14 @@ def review():
         rating = request.form.get('review_tags')
         review = request.form.get('review_value')
         email = 'satish'
-        isbn = "1234"
+        # isbn = "1234"
         if (REVIEW.query.filter_by(email = email, isbn = isbn).first() == None) :
             data = REVIEW(email = email, isbn = "1234", rating = rating, review = review) 
             db1.session.add(data)
             db1.session.commit()
         else:
             total_reviews = db1.session.query(REVIEW).filter(REVIEW.isbn == "1234")
-            return render_template('review.html',message = 'You have already given review',total_reviews=total_reviews,isbn = "1234")
+            return render_template('review.html', message = 'You have already given review', total_reviews=total_reviewsb,isbn = "1234")
     total_reviews = db1.session.query(REVIEW).filter(REVIEW.isbn == "1234")
-    return render_template('review.html', message1 = 'review submitted succesfully.',total_reviews=total_reviews,isbn = "1234")
+    return render_template('review.html', message1 = 'review submitted succesfully.', total_reviews=total_reviews, isbn = "1234")
 
