@@ -107,6 +107,7 @@ def books():
 @app.route("/logout")
 def logout(): 
     session.pop('username', None)
+    
     return render_template("registration.html")
 
 
