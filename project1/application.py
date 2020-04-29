@@ -104,11 +104,11 @@ def books():
     return render_template("bookpage.html",data=details)
 
 
-@app.route("/logout")
-def logout(): 
-    session.pop('username', None)
+# @app.route("/logout")
+# def logout(): 
+#     session.pop('username', None)
     
-    return render_template("registration.html")
+#     return render_template("registration.html")
 
 
    
