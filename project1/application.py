@@ -73,8 +73,6 @@ def index():
         return render_template ("user.html", message= "You are Logged in as " + username)
     return redirect(url_for('register'))
    
-
-
 @app.route("/auth",methods = ["GET","POST"])
 def authenticate():
     # database.query.all()
