@@ -93,7 +93,7 @@ def authenticate():
 
 @app.route('/review', methods =['GET','POST'])
 def review():
-    if request.method == 'POST':           
+    if request.method == 'POST':
         rating = request.form.get('review_tags')
         review = request.form.get('review_value')
         email = session['username']
