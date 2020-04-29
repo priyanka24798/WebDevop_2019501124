@@ -88,10 +88,7 @@ def authenticate():
         return render_template("registration.html", message = "Account does not exists..Please register!! ")
 
 
-@app.route("/logout")
-def logout():
-    session.pop('username', None)
-    return render_template("registration.html")
+
 
 # @app.route("/bookpage/<string:isbn_id>")
 # def book_details(isbn_id):
@@ -105,6 +102,11 @@ def books():
     details =  Books.query.filter_by(isbn = isbn)
     # review = "SELECT * FROM REVIEW WHERE isbn = 1234"
     return render_template("bookpage.html",data=details)
+
+@app.route("/logout")
+def logout():
+    session.pop('username', None)
+    return render_template("registration.html")
 
 
 
