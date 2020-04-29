@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <title>My Website!</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <style> 
+            body {
+                background-color:skyblue;
+                margin-left: 20%;
+                margin-right: 20%;
+            }
+            h1,h2 {
+                text-align: center;
+            }
+            td{
+                text-align: center;
+            }
+            th {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Book Details</h1>
+        &emsp;
+        <table class="table table-striped">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Details</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for book in data %}
+            <tr>
+                <td>ISBN</td>
+                <td>{{book.isbn}}</td>
+            </tr>
+            <tr> 
+                <td>Title</td>
+                <td>{{book.tittle}}</td>
+            </tr>
+            <tr> 
+                <td>Author</td>
+                <td>{{book.author}}</td>
+            </tr>
+            <tr> 
+                <td>Published</td>
+                <td>{{book.year}}</td>
+            </tr>
+            {% endfor %}      
+            </tbody>
+
+            <!-- {% for item in result %}
+                {{item.isbn}}
+                {{item.email}}
+                {{item.rating}}
+                {{item.review}}
+            {% endfor %} -->
+    </body>
+</html>
