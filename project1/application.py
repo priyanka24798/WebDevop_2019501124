@@ -113,8 +113,3 @@ def search():
         return render_template("user.html", message= "No books found.!")
     return render_template("user.html")
 
-
-@app.route("/logout")
-def logout(): 
-    session.pop('username', None)
-    return render_template("registration.html")
