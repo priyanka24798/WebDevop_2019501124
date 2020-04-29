@@ -113,12 +113,11 @@ def search():
         return render_template("user.html", message= "No books found.!")
     return render_template("user.html")
 
-
-@app.route("/bookpage/<string:isbn_id>")
+@app.route("/bookpage/<string: isbn_id>")
 def book_details(isbn_id):
     book = db1.session.query(Books).filter(Books.isbn == isbn_id).all()
-    return render_template("bookpage.html", data=book)
-
+    return render_template("bookpage.html", data = book)
+        
 
 
 @app.route("/logout")
