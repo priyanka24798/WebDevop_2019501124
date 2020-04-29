@@ -8,35 +8,122 @@
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <style>
         body{
-            background-color: rgb(238, 192, 210);
+            /* background-color: rgb(148, 126, 135); */
+            background: url('/static/img/bg.jpeg');
         }
         h1{
             text-align: center;
-            color: rgb(20, 31, 2);
+            color: rgb(224, 93, 6);
             font-style: italic;
-        }
-        h2{
-            color: brown;
-            font-size: xx-large;
-            text-align: center;
             font-weight: 900;
-
+        }
+        
+        .box{
+            align-self: center;
+            text-align: center;
 
         }
-        .button{
-            background-color: brown;
+        #loginbox{
+        position: relative;
+        margin: 10% auto;
+        background: #fff;
+        width: 400px;
+        height: 300px;
+        box-shadow: 0 8px 10px rgba(0, 0, 0, 0.6);
+        }
+        .row{
+            padding-left: 500px;
+            padding-right: 500px;
+        }
+        #log{
+           align-self: flex-end;
+        }
+        .selection{
+            padding-left: 690px;
+            
+        }
+        .form-group h4{
+            text-align: center;
 
         }
+        .table{
+            
+            width: auto;
+           margin-left: auto;
+           margin-right: auto;
+        }
+        
+        
     </style>
 </head>
 <body>
-    <h1> Successfully logged in ..!</h1>
     <p></p>
-    <p style="color:red;text-align: center;">{{message}}</p>
-    <h2> Hello..</h2>
+    <h1> Hello..!! Welcome to our book review site</h1>
+    <p></p>
     <form action="/registration" class="inline">
-        <button class="btn btn-primary" >Logout</button>
+        <button class="btn btn-danger float-right" id = "log" >Logout</button>
     </form>
+    <!-- <p style="color:rgb(244, 246, 247);text-align: center;">{{message}}</p> -->
+    
+    <!-- <div id= "loginbox"> -->
+       
+        <form action ="{{url_for('search')}}" method="post">
+            <div  class = "selection">
+            <input type="radio" id="option1" name="isbnsearch" value="option1">
+            <label for="search1">Search by ISBN</label><br>
+
+            <input type="radio" id="option2" name="titlesearch" value="option2">
+            <label for="search2">Search by Title</label><br>
+
+            <input type="radio" id="option3" name="authorsearch" value="option3">
+            <label for="search3">Search by Author</label>
+            </div>
+
+            <div class="row">
+            <label for="exampleInputEmail1"><h4>Search for Books</h4></label>
+            <input type="text" class="form-control" name="search" placeholder=" Enter ISBN / Title / Author">
+            </div>
+            <p></p>
+            <p class = "box" >
+                <button type="submit" formaction="Search" value="Login" class="btn btn-primary">Search</button>
+           
+            
+          </form>
+        <div id= "searchresults">
+            <!-- <h1>
+                Search details
+            </h1> -->
+            <table class="table" >
+                
+                  <tr>
+                    <!-- <th scope="col">Serial.no</th> -->
+                    <!-- <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col">Author</th> -->
+        
+                  </tr>
+               
+                <tbody>
+                    <p style="color:rgb(244, 246, 247);text-align: center;">{{message}}</p>
+                    {% for record in Books %}
+                <!-- <a href = "/book/{{record.isbn}}" >  -->
+                <tr>
+                    <!-- <th scope="row">{{record}}</th> -->
+                   
+                    <td><a href = "{{record.isbn}}" > {{record.isbn}} </td>
+                    <td>{{record.tittle}}</td>
+                    <td>{{record.author}}</td>
+                </tr>
+                </a>
+               
+                {% endfor %}
+        
+                 
+                </tbody>
+              </table>
+        </div>
+          
+
 
 </body>
 </html>

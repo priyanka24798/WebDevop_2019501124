@@ -91,24 +91,26 @@ def authenticate():
     else:
         return render_template("registration.html", message = "Account does not exists..Please register!! ")
 
-@app.route('/review', methods =['GET','POST'])
-def review():
-    if request.method == 'POST':
-        rating = request.form.get('review_tags')
-        review = request.form.get('review_value')
-        email = session['username']
-        temp = list(request.form.items())
-        print(temp)
-        isbn = temp[2][0]
-        book = db1.session.query(Books).filter(Books.isbn == isbn).all()
-        reviews = db.session.query(REVIEW).filter(REVIEW.isbn == isbn)
-        if (REVIEW.query.filter_by(email = email, isbn = isbn).first() == None):
-            data = REVIEW(email = email, isbn = isbn, rating = rating, review = review) 
-            db.session.add(data)
-            db.session.commit()
-        else:
-            return render_template('review.html',message = 'You have already given review',data=book, reviews=reviews,isbn = isbn)
-    return render_template('review.html',email = session['username'], message1 = 'review submitted succesfully.',data=book, reviews=reviews,isbn = isbn)
+@app.route('/Search', methods=["GET","POST"])
+def search():
+    
+    if(request.method == "POST"):
+        book_search = request.form.get("search")
+
+        if request.form.get("isbnsearch") == "option1":
+            s = Books.query.filter(Books.isbn.like( book_search +'%')).all()
+            return render_template("user.html", Books = s)
+
+        elif request.form.get("titlesearch") == "option2":
+            s = db1.session.query(Books).filter((Books.tittle.like('%'+ book_search +'%')))
+            return render_template("user.html", Books = s)
+       
+        elif request.form.get("authorsearch") == "option3":
+            s = db1.session.query(Books).filter((Books.author.like('%'+ book_search +'%')))
+            return render_template("user.html", Books = s)
+        return render_template("user.html", message= "No books found.!")
+    return render_template("user.html")
+
 
 @app.route("/logout")
 def logout(): 
