@@ -107,8 +107,8 @@ def review():
             db.session.add(data)
             db.session.commit()
         else:
-            return render_template('bookpage.html',message = 'You have already given review',data=book, reviews=reviews,isbn = isbn)
-    return render_template('bookpage.html',email = session['username'], message1 = 'review submitted succesfully.',data=book, reviews=reviews,isbn = isbn)
+            return render_template('review.html',message = 'You have already given review',data=book, reviews=reviews,isbn = isbn)
+    return render_template('review.html',email = session['username'], message1 = 'review submitted succesfully.',data=book, reviews=reviews,isbn = isbn)
 
 @app.route("/logout")
 def logout(): 
