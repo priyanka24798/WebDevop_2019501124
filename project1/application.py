@@ -1,5 +1,4 @@
 import os
-from models import*
 
 from flask import Flask, session, request, url_for
 from flask import redirect
@@ -9,17 +8,21 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from database import *
 from datetime import datetime
+from booksimport import *
+from sqlalchemy import or_
+from bookreview import *
 
 
 app = Flask(__name__)
+# app1 = Flask(__name__)
 
 
-# # Check for environment variable
-# if not os.getenv("DATABASE_URL"):
-#     raise RuntimeError("DATABASE_URL is not set")
+# Check for environment variable
+if not os.getenv("DATABASE_URL"):
+    raise RuntimeError("DATABASE_URL is not set")
 
-# # app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
-# # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+# app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+# app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Configure session to use filesystem
 # app.config["SESSION_PERMANENT"] = False
@@ -32,6 +35,7 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
+# db1.init_app(app1)
 app.secret_key= "log-in"
 
 
@@ -64,6 +68,8 @@ def users():
 def index():
     if 'username' in session:
         username = session['username']
+
+
         return render_template ("user.html", message= "You are Logged in as " + username)
     return redirect(url_for('register'))
    
@@ -71,7 +77,7 @@ def index():
 
 @app.route("/auth",methods = ["GET","POST"])
 def authenticate():
-    database.query.all()
+    # database.query.all()
     name = request.form.get("username")
     email = request.form.get("email-id")
     password = request.form.get("password")
@@ -81,19 +87,32 @@ def authenticate():
     if member is not None:
         if ((member.password == password and member.email == email) and member.name == name):
             session['username'] = request.form.get("email-id")
-            return redirect(url_for('index'))
+            return render_template("user.html")
         else:
             return render_template("registration.html", message = "Invalid credentials!")
     else:
         return render_template("registration.html", message = "Account does not exists..Please register!! ")
 
+@app.route('/Search', methods=["GET","POST"])
+def search():
+    
+    if(request.method == "POST"):
+        book_search = request.form.get("search")
 
+        if request.form.get("isbnsearch") == "option1":
+            s = Books.query.filter(Books.isbn.like( book_search +'%')).all()
+            return render_template("user.html", Books = s)
 
+        elif request.form.get("titlesearch") == "option2":
+            s = db1.session.query(Books).filter((Books.tittle.like('%'+ book_search +'%')))
+            return render_template("user.html", Books = s)
+       
+        elif request.form.get("authorsearch") == "option3":
+            s = db1.session.query(Books).filter((Books.author.like('%'+ book_search +'%')))
+            return render_template("user.html", Books = s)
+        return render_template("user.html", message= "No books found.!")
+    return render_template("user.html")
 
-# @app.route("/bookpage/<string:isbn_id>")
-# def book_details(isbn_id):
-#     book = db1.session.query(Books).filter(Books.isbn == isbn_id).all()
-#     return render_template("bookpage.html", data=book)
 
 @app.route("/bookpage")
 def books():
@@ -104,11 +123,7 @@ def books():
     return render_template("bookpage.html",data=details)
 
 
-# @app.route("/logout")
-# def logout(): 
-#     session.pop('username', None)
-    
-#     return render_template("registration.html")
-
-
-   
+@app.route("/logout")
+def logout(): 
+    session.pop('username', None)
+    return render_template("registration.html")
