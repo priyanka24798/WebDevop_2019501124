@@ -8,17 +8,21 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from database import *
 from datetime import datetime
-from review import *
+from booksimport import *
+from sqlalchemy import or_
+from bookreview import *
+
 
 app = Flask(__name__)
+# app1 = Flask(__name__)
 
 
-# # Check for environment variable
-# if not os.getenv("DATABASE_URL"):
-#     raise RuntimeError("DATABASE_URL is not set")
+# Check for environment variable
+if not os.getenv("DATABASE_URL"):
+    raise RuntimeError("DATABASE_URL is not set")
 
-# # app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
-# # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+# app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+# app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Configure session to use filesystem
 # app.config["SESSION_PERMANENT"] = False
@@ -31,6 +35,7 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
+# db1.init_app(app1)
 app.secret_key= "log-in"
 
 
@@ -46,9 +51,9 @@ def register():
         try:
             db.session.add(register)
             db.session.commit()
-            # print(name)
-            # print(password)
-            # print(email)
+            print(name)
+            print(password)
+            print(email)
             return render_template("registration.html", message = "Congratulation, you have successfully registered..you can now login..!")
         except Exception:
             return render_template("error.html")
@@ -63,14 +68,14 @@ def users():
 def index():
     if 'username' in session:
         username = session['username']
+
+
         return render_template ("user.html", message= "You are Logged in as " + username)
     return redirect(url_for('register'))
    
-
-
 @app.route("/auth",methods = ["GET","POST"])
 def authenticate():
-    database.query.all()
+    # database.query.all()
     name = request.form.get("username")
     email = request.form.get("email-id")
     password = request.form.get("password")
@@ -80,32 +85,32 @@ def authenticate():
     if member is not None:
         if ((member.password == password and member.email == email) and member.name == name):
             session['username'] = request.form.get("email-id")
-            return redirect(url_for('index'))
+            return render_template("user.html")
         else:
             return render_template("registration.html", message = "Invalid credentials!")
     else:
         return render_template("registration.html", message = "Account does not exists..Please register!! ")
 
-
-@app.route("/logout")
-def logout():
-    session.clear()
-    return render_template("registration.html")
-
 @app.route('/review', methods =['GET','POST'])
 def review():
-    if request.method == 'POST':
+    if request.method == 'POST':           
         rating = request.form.get('review_tags')
         review = request.form.get('review_value')
-        email = 'satish'
-        # isbn = "1234"
-        if (REVIEW.query.filter_by(email = email, isbn = isbn).first() == None) :
-            data = REVIEW(email = email, isbn = "1234", rating = rating, review = review) 
-            db1.session.add(data)
-            db1.session.commit()
+        email = session['username']
+        temp = list(request.form.items())
+        print(temp)
+        isbn = temp[2][0]
+        book = db1.session.query(Books).filter(Books.isbn == isbn).all()
+        reviews = db.session.query(REVIEW).filter(REVIEW.isbn == isbn)
+        if (REVIEW.query.filter_by(email = email, isbn = isbn).first() == None):
+            data = REVIEW(email = email, isbn = isbn, rating = rating, review = review) 
+            db.session.add(data)
+            db.session.commit()
         else:
-            total_reviews = db1.session.query(REVIEW).filter(REVIEW.isbn == "1234")
-            return render_template('review.html', message = 'You have already given review', total_reviews=total_reviewsb,isbn = "1234")
-    total_reviews = db1.session.query(REVIEW).filter(REVIEW.isbn == "1234")
-    return render_template('review.html', message1 = 'review submitted succesfully.', total_reviews=total_reviews, isbn = "1234")
+            return render_template('bookpage.html',message = 'You have already given review',data=book, reviews=reviews,isbn = isbn)
+    return render_template('bookpage.html',email = session['username'], message1 = 'review submitted succesfully.',data=book, reviews=reviews,isbn = isbn)
 
+@app.route("/logout")
+def logout(): 
+    session.pop('username', None)
+    return render_template("registration.html")
