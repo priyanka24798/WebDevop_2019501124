@@ -124,6 +124,27 @@ def search():
     return render_template("user.html")
 
 
+@app.route('/api/search/<search>')
+def api_search(search):
+    searchbook = search
+    result =  Books.query.filter(or_((Books.isbn.like('%'+ searchbook +'%')),(Books.tittle.like('%'+ searchbook +'%') ),(Books.author.like('%'+ searchbook +'%')))).all()
+    if (len(result)== 0) :
+        return jsonify ({"ERROR": "BOOK NOT FOUND"}), 400
+    
+    booktitle =[]
+    bookisbn = []
+    bookauthor=[]
+    for i in result:
+        booktitle.append(i.tittle)
+        bookauthor.append(i.author)
+        bookisbn.append(i.isbn)
+    
+    return jsonify({
+        "ISBN" : bookisbn,
+        "AUTHOR": bookauthor,
+        "TITLE": booktitle,
+    })
+
 
 
 
