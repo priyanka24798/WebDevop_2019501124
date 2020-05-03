@@ -86,8 +86,8 @@ h1{
         function registration()
         
 	{
-        var x = document.forms["myform"]["username"].value;
-        if (x == "") {
+        var name = document.forms["myform"]["username"].value;
+        if (name == "") {
             alert("Name must be filled out");
             return false;
         }
@@ -99,21 +99,38 @@ h1{
             return false;
         }
         var x = document.forms["myform"]["password"].value;
+        var y = document.forms["myform"]["confirmpwd"].value;
         var checkpwd = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])/;
         if (x == "") {
             alert("Enter password please!");
+            disableButton()
             return false;
         }
         else if(!checkpwd.test(x)){
 			alert ('Upper case, Lower case, Number and special character are required in Password filed');
+            disableButton()
             return false;
         }
         else if(x.length <= 6)
 		{
 			alert ('Your password must be of 6 characters');
+            disableButton()
             return false;
 		}
+        else if(x != y){
+            alert ('password is not matched')
+            disableButton()
+            return false;
+        }
+
     }
+   
+
+    function disableButton() {
+        var btn = document.getElementById('btn');
+        btn.disabled = true;
+    }
+
     </script>
     
 
@@ -131,25 +148,26 @@ h1{
       </div>
 
     <div id= "loginbox">
-        <form action ="{{url_for('register')}}" name = "myform"  method="post">
+        <form action ="{{url_for('register')}}" name = "myform"   method="post">
             <p style="color:red;text-align: center;">{{message}}</p>
             
             <div class="form-row">
               <div class="col">
                 <label for="exampleinput">Name</label>
-                <input type="text" class="form-control" name="username" id = "t1" placeholder="Your name please">
+                <input type="text" class="form-control" name="username"   placeholder="Your name please">
                 <p></p>
                
                 <label for="exampleInput">Email-id</label>
-                <input type="text" class="form-control" name="email-id" id = "t2" placeholder="sample@example.com" required>
+                <input type="text" class="form-control" name="email-id"  placeholder="sample@example.com" >
                 <p></p>
                 <label for="exampleInput">Password</label>
-                <input type="password" class="form-control" name="password" id = "t3" placeholder="Must be 8 characters" required>
+                <input type="password" class="form-control" name="password"  placeholder="Must be atleast 6 characters" required>
                 <p></p>
-                <label for="exampleInput"> Retype - Password</label>
-                <input type="password" class="form-control"  id = "t4" placeholder="Must be 6 characters" required>
+                <label for="exampleInput">Confirm Password</label>
+                <input type="password" class="form-control" name="confirmpwd"  placeholder="Must be atleast 6 characters" required>
+                
                 <p></p>
-                <button type="submit" class="btn btn-primary"  onclick ="registration()" >Register</button>
+                <button type="submit" class="btn btn-primary" id = "btn" onclick ="registration()"  >Register</button>
                 <button type="submit" formaction="auth" value="Login" class="btn btn-primary">Login</button>
 
                 

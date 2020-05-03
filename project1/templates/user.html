@@ -23,14 +23,14 @@
             text-align: center;
 
         }
-        #loginbox{
+        /* #loginbox{
         position: relative;
         margin: 10% auto;
         background: #fff;
         width: 400px;
         height: 300px;
         box-shadow: 0 8px 10px rgba(0, 0, 0, 0.6);
-        }
+        } */
         .row{
             padding-left: 500px;
             padding-right: 500px;
@@ -57,6 +57,9 @@
     </style>
 </head>
 <body>
+        
+
+
     <p></p>
     <h1> Hello..!! Welcome to our book review site</h1>
     <p></p>
@@ -85,7 +88,7 @@
             </div>
             <p></p>
             <p class = "box" >
-                <button type="submit" formaction="Search" value="Login" class="btn btn-primary">Search</button>
+                <button type="submit" formaction="/api/search" value="Login" class="btn btn-primary">Search</button>
            
             
           </form>
@@ -110,7 +113,7 @@
                 <tr>
                     <!-- <th scope="row">{{record}}</th> -->
                    
-                    <td><a href = "{{record.isbn}}" > {{record.isbn}} </td>
+                    <td><a href = "/bookpage/{{record.isbn}}" > {{record.isbn}} </td>
                     <td>{{record.tittle}}</td>
                     <td>{{record.author}}</td>
                 </tr>
@@ -127,3 +130,7 @@
 
 </body>
 </html>
+
+<script>
+     
+</script>
