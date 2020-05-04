@@ -9,7 +9,7 @@
     <style>
         body{
             /* background-color: rgb(148, 126, 135); */
-            background: url('/static/img/bg.jpeg');
+            background: url('/static/img/bg3.jpg');
         }
         h1{
             text-align: center;
@@ -32,46 +32,86 @@
         box-shadow: 0 8px 10px rgba(0, 0, 0, 0.6);
         } */
         .row{
-            padding-left: 500px;
-            padding-right: 500px;
+            padding-left: 650px;
+            padding-right: 650px;
         }
         #log{
            align-self: flex-end;
         }
         .selection{
-            padding-left: 690px;
+            padding-left:635px;
+            padding-right:700px;
+           
             
         }
         .form-group h4{
             text-align: center;
+            width: auto;
+            color: green;
 
         }
         .table{
             
-            width: auto;
+           width: auto;
            margin-left: auto;
            margin-right: auto;
+           color: aliceblue;
+           background-color: black;
         }
         
         
     </style>
 </head>
 <body>
-        
+    <script>
 
+    </script>
+    
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('form').onsubmit = () => {
+                const request = new XMLHttpRequest();
+                const selection = document.getElementById('select').value;
+                const searchbook = document.getElementById('booksearch').value;
+                request.open('POST', '/api/search');
+                
+                request.onload = () => {
+                    const data = JSON.parse(request.responseText);
+
+                    if(data.success){
+                        if(data.results.length != 0){
+                            console.log("loading..")
+                            
+                            var display_results = " ";
+                            
+                            data.results.forEach(result => {
+                                display_results += "<tr> <td> <a href='/bookpage/isbn" + result["ISBN"] + "'>" + result["ISBN"] + 
+                                "</a> </td> <td>" + result["title"] + 
+                                "</td> <td>" + result["Author"] +" </td> </tr>";
+                            });
+                            document.getElementById("search_results").innerHTML = display_results
+                        }
+                    }
+                }
+                request.send(JSON.stringify({"select" : selection, "booksearch" : searchbook}));
+                return false;
+            }
+        });
+    </script>
 
     <p></p>
-    <h1> Hello..!! Welcome to our book review site</h1>
+    <p style="color:rgb(244, 246, 247);text-align: center;">{{message}}</p>
+    <h1> Hello..!! Welcome </h1>
     <p></p>
     <form action="/registration" class="inline">
         <button class="btn btn-danger float-right" id = "log" >Logout</button>
     </form>
-    <!-- <p style="color:rgb(244, 246, 247);text-align: center;">{{message}}</p> -->
+     
     
-    <!-- <div id= "loginbox"> -->
+     <!-- <div id= "loginbox"> -->
        
-        <form action ="{{url_for('search')}}" method="post">
-            <div  class = "selection">
+        <!-- <form action ="{{url_for('search')}}" method="post" id = "form">
+            <div  class = "selection" id = "select" name = "Search">
             <input type="radio" id="option1" name="isbnsearch" value="option1">
             <label for="search1">Search by ISBN</label><br>
 
@@ -84,43 +124,62 @@
 
             <div class="row">
             <label for="exampleInputEmail1"><h4>Search for Books</h4></label>
-            <input type="text" class="form-control" name="search" placeholder=" Enter ISBN / Title / Author">
+            <input type="text" id = "search_text" class="form-control" name="search" placeholder=" Enter ISBN / Title / Author">
             </div>
             <p></p>
             <p class = "box" >
-                <button type="submit" formaction="/api/search" value="Login" class="btn btn-primary">Search</button>
+                <button type="submit"  value="Login" id = "search" class="btn btn-primary">Search</button>
            
             
-          </form>
+          </form> -->
+
+          <form id = "form" style = "text-align: center;" method = "POST">
+            
+            <label for="exampleInputEmail1"  style=" color: rgb(248, 245, 58); " ><h4>Search for Books :</h4></label>
+            <div class = "selection">
+            <select id = "select" type = "text" class = "custom-select" style=" align-items: center; " >
+                <option name = select >Select</option>
+                <option value = "option1" name = "authorsearch">search by Author</option>
+                <option value = "option2" name = "isbnsearch">search by ISBN</option>
+                <option value = "option3" name = "titlesearch">search by Title</option>
+            </select>
+        </div>
+        <p></p>
+            <div class="row">
+                <p></p>
+                <input type="text" id = "booksearch" class="form-control"  name="search" placeholder=" Enter ISBN / Title / Author">
+                <p></p>
+            </div>
+            <p></p>
+            <button type="submit"  value="Login" id = "search" class="btn btn-primary">Search</button>
+               <p></p>
+        </form>
+         
+            
+        
         <div id= "searchresults">
-            <!-- <h1>
-                Search details
-            </h1> -->
+           
             <table class="table" >
                 
                   <tr>
-                    <!-- <th scope="col">Serial.no</th> -->
-                    <!-- <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col">Author</th> -->
-        
+                   
                   </tr>
                
-                <tbody>
-                    <p style="color:rgb(244, 246, 247);text-align: center;">{{message}}</p>
-                    {% for record in Books %}
-                <!-- <a href = "/book/{{record.isbn}}" >  -->
-                <tr>
-                    <!-- <th scope="row">{{record}}</th> -->
+                <tbody id = "search_results">
+                    <!-- <p style="color:rgb(244, 246, 247);text-align: center;">{{message}}</p> -->
+                    <!-- {% for record in Books %} -->
+               
+                <!-- <tr>
+                  
                    
                     <td><a href = "/bookpage/{{record.isbn}}" > {{record.isbn}} </td>
                     <td>{{record.tittle}}</td>
                     <td>{{record.author}}</td>
-                </tr>
-                </a>
+                </tr> -->
+                <!-- </a> -->
                
-                {% endfor %}
-        
+                 <!-- {% endfor %}
+         -->
                  
                 </tbody>
               </table>

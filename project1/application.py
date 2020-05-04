@@ -103,51 +103,71 @@ def search():
     if(request.method == "POST"):
         book_search = request.form.get("search")
         
+        
         if request.form.get("isbnsearch") == "option1":
-            print(book_search +" like  "+"isbnsearch")
             s = Books.query.filter(Books.isbn.like('%'+ book_search +'%')).all()
-            print(s)
             return render_template("user.html", Books = s)
 
         elif request.form.get("titlesearch") == "option2":
-            print(book_search +" like   "+"titlesearch")
             s = db1.session.query(Books).filter((Books.tittle.like('%'+ book_search +'%')))
-            print(s)
             return render_template("user.html", Books = s)
        
         elif request.form.get("authorsearch") == "option3":
-            print(book_search +" like   "+"authorsearch")
             s = db1.session.query(Books).filter((Books.author.like('%'+ book_search +'%')))
-            print(s)
             return render_template("user.html", Books = s)
-        return render_template("user.html", message= "No books found.!")
+        return render_template("user.html", message1= "No books found.!")
     return render_template("user.html")
 
 
-@app.route('/api/search/<search>')
-def api_search(search):
-    searchbook = search
-    result =  Books.query.filter(or_((Books.isbn.like('%'+ searchbook +'%')),(Books.tittle.like('%'+ searchbook +'%') ),(Books.author.like('%'+ searchbook +'%')))).all()
-    if (len(result)== 0) :
-        return jsonify ({"ERROR": "BOOK NOT FOUND"}), 400
+# @app.route('/api/search', methods =["POST"])
+# def api_search():
+#     if request.method == "POST":
+#         searchbook = request.form.get("search")
+#         result =  Books.query.filter(or_((Books.isbn.like('%'+ searchbook +'%')),(Books.tittle.like('%'+ searchbook +'%') ),(Books.author.like('%'+ searchbook +'%')))).all()
     
-    booktitle =[]
-    bookisbn = []
-    bookauthor=[]
-    for i in result:
-        booktitle.append(i.tittle)
-        bookauthor.append(i.author)
-        bookisbn.append(i.isbn)
-    
-    return jsonify({
-        "ISBN" : bookisbn,
-        "AUTHOR": bookauthor,
-        "TITLE": booktitle,
-    })
+#         if (len(result)== 0) :
+#             return jsonify ({"ERROR": "BOOK NOT FOUND"}), 400
+        
+#         booktitle =[]
+#         bookisbn = []
+#         bookauthor=[]
+#         for record in result:
+#             booktitle.append(record.tittle)
+#             bookauthor.append(record.author)
+#             bookisbn.append(record.isbn)
+        
+#         json_results = {
+#             "ISBN" : bookisbn,
+#             "AUTHOR": bookauthor,
+#             "TITLE": booktitle,
+#         }
+#         print(json_results)
+#         return jsonify(json_results), 200
+#     return "<h1>Search again</h1>"
 
-
-
-
+@app.route("/api/search", methods = ["POST"])
+def api_search():
+    if request.method == "POST":
+        content = request.get_json(force = True)
+        search = content["select"].strip()
+        searchbook = "%" + content["booksearch"].strip() + "%"
+        if search == "option1":
+            results = Books.query.filter(Books.author.like(searchbook)).all()
+        if search == "option2":
+            results = Books.query.filter(Books.isbn.like(searchbook)).all()
+        if search == "option3":
+            results = Books.query.filter(Books.title.like(searchbook)).all()
+        if results is not None:
+            search_results = []
+            for result in results:
+                details = {
+                 "ISBN" : result.isbn,
+                 "title" : result.tittle, 
+                 "Author" : result.author,
+                 }
+                search_results.append(details)
+            return jsonify({"success" : True, "results" : search_results})
+    return render_template("user.html")
 
 
 @app.route("/bookpage/<string:isbn_id>")
@@ -156,9 +176,6 @@ def book_details(isbn_id):
     review = db1.session.query(REVIEW).filter(REVIEW.isbn == isbn_id).all()
     total_reviews = db.session.query(REVIEW).filter(REVIEW.isbn == isbn_id)
     return render_template("bookpage.html", data=book, isbn_id = isbn_id, total_reviews = total_reviews)
-
-
-
 
 @app.route('/review', methods =['GET','POST'])
 def review():
