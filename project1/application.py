@@ -124,38 +124,24 @@ def search():
     return render_template("user.html")
 
 
-@app.route('/api/search/<search>')
-def api_search(search):
-    searchbook = search
-    result =  Books.query.filter(or_((Books.isbn.like('%'+ searchbook +'%')),(Books.tittle.like('%'+ searchbook +'%') ),(Books.author.like('%'+ searchbook +'%')))).all()
-    if (len(result)== 0) :
-        return jsonify ({"ERROR": "BOOK NOT FOUND"}), 400
-    
-    booktitle =[]
-    bookisbn = []
-    bookauthor=[]
-    for i in result:
-        booktitle.append(i.tittle)
-        bookauthor.append(i.author)
-        bookisbn.append(i.isbn)
-    
-    return jsonify({
-        "ISBN" : bookisbn,
-        "AUTHOR": bookauthor,
-        "TITLE": booktitle,
-    })
-
-
-
-
-
-
 @app.route("/bookpage/<string:isbn_id>")
 def book_details(isbn_id):
     book = db1.session.query(Books).filter(Books.isbn == isbn_id).all()
     review = db1.session.query(REVIEW).filter(REVIEW.isbn == isbn_id).all()
     total_reviews = db.session.query(REVIEW).filter(REVIEW.isbn == isbn_id)
     return render_template("bookpage.html", data=book, isbn_id = isbn_id, total_reviews = total_reviews)
+
+@app.route("/api/bookpage",methods = ["POST"])
+def apibookpage():
+    isbn = request.form.get("isbn")
+    bookreturned = getbook(isbn) 
+    print(bookreturned[0],"tets")
+    Bookdetails = {}
+    Bookdetails["isbn"] = bookreturned[0].isbn
+    Bookdetails["title"] = bookreturned[0].tittle
+    Bookdetails["author"] = bookreturned[0].author
+    Bookdetails["year"] = bookreturned[0].year
+    return jsonify({"bookinfo":Bookdetails})
 
 
 
