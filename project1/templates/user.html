@@ -63,41 +63,7 @@
     </style>
 </head>
 <body>
-    <script>
-
-    </script>
-    
-<script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('form').onsubmit = () => {
-                const request = new XMLHttpRequest();
-                const selection = document.getElementById('select').value;
-                const searchbook = document.getElementById('booksearch').value;
-                request.open('POST', '/api/search');
-                
-                request.onload = () => {
-                    const data = JSON.parse(request.responseText);
-
-                    if(data.success){
-                        if(data.results.length != 0){
-                            console.log("loading..")
-                            
-                            var display_results = " ";
-                            
-                            data.results.forEach(result => {
-                                display_results += "<tr> <td> <a href='/bookpage/isbn" + result["ISBN"] + "'>" + result["ISBN"] + 
-                                "</a> </td> <td>" + result["title"] + 
-                                "</td> <td>" + result["Author"] +" </td> </tr>";
-                            });
-                            document.getElementById("search_results").innerHTML = display_results
-                        }
-                    }
-                }
-                request.send(JSON.stringify({"select" : selection, "booksearch" : searchbook}));
-                return false;
-            }
-        });
-    </script>
+   
 
     <p></p>
     <p style="color:rgb(244, 246, 247);text-align: center;">{{message}}</p>
@@ -108,30 +74,7 @@
     </form>
      
     
-     <!-- <div id= "loginbox"> -->
-       
-        <!-- <form action ="{{url_for('search')}}" method="post" id = "form">
-            <div  class = "selection" id = "select" name = "Search">
-            <input type="radio" id="option1" name="isbnsearch" value="option1">
-            <label for="search1">Search by ISBN</label><br>
-
-            <input type="radio" id="option2" name="titlesearch" value="option2">
-            <label for="search2">Search by Title</label><br>
-
-            <input type="radio" id="option3" name="authorsearch" value="option3">
-            <label for="search3">Search by Author</label>
-            </div>
-
-            <div class="row">
-            <label for="exampleInputEmail1"><h4>Search for Books</h4></label>
-            <input type="text" id = "search_text" class="form-control" name="search" placeholder=" Enter ISBN / Title / Author">
-            </div>
-            <p></p>
-            <p class = "box" >
-                <button type="submit"  value="Login" id = "search" class="btn btn-primary">Search</button>
-           
-            
-          </form> -->
+    
 
           <form id = "form" style = "text-align: center;" method = "POST">
             
@@ -166,20 +109,20 @@
                   </tr>
                
                 <tbody id = "search_results">
-                    <!-- <p style="color:rgb(244, 246, 247);text-align: center;">{{message}}</p> -->
-                    <!-- {% for record in Books %} -->
+                    <p style="color:rgb(244, 246, 247);text-align: center;">{{message}}</p>
+                    {% for record in Books %}
                
-                <!-- <tr>
+                <tr>
                   
                    
                     <td><a href = "/bookpage/{{record.isbn}}" > {{record.isbn}} </td>
                     <td>{{record.tittle}}</td>
                     <td>{{record.author}}</td>
-                </tr> -->
-                <!-- </a> -->
+                </tr>
+                </a>
                
-                 <!-- {% endfor %}
-         -->
+                 {% endfor %}
+        
                  
                 </tbody>
               </table>

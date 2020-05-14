@@ -13,6 +13,7 @@ from booksimport import *
 from sqlalchemy import or_
 from review import *
 import requests
+from getbooks import *
 
 
 app = Flask(__name__)
@@ -87,15 +88,11 @@ def authenticate():
     if member is not None:
         if ((member.password == password and member.email == email) and member.name == name):
             session['username'] = request.form.get("email-id")
-            return render_template("user.html")
+            return render_template("singlepage.html")
         else:
             return render_template("registration.html", message = "Invalid credentials!")
     else:
         return render_template("registration.html", message = "Account does not exists..Please register!! ")
-
-
-
-
 
 @app.route('/Search', methods=["GET","POST"])
 def search():
@@ -119,56 +116,68 @@ def search():
     return render_template("user.html")
 
 
-# @app.route('/api/search', methods =["POST"])
-# def api_search():
-#     if request.method == "POST":
-#         searchbook = request.form.get("search")
-#         result =  Books.query.filter(or_((Books.isbn.like('%'+ searchbook +'%')),(Books.tittle.like('%'+ searchbook +'%') ),(Books.author.like('%'+ searchbook +'%')))).all()
-    
-#         if (len(result)== 0) :
-#             return jsonify ({"ERROR": "BOOK NOT FOUND"}), 400
-        
-#         booktitle =[]
-#         bookisbn = []
-#         bookauthor=[]
-#         for record in result:
-#             booktitle.append(record.tittle)
-#             bookauthor.append(record.author)
-#             bookisbn.append(record.isbn)
-        
-#         json_results = {
-#             "ISBN" : bookisbn,
-#             "AUTHOR": bookauthor,
-#             "TITLE": booktitle,
-#         }
-#         print(json_results)
-#         return jsonify(json_results), 200
-#     return "<h1>Search again</h1>"
+@app.route("/api/search",methods = ["POST"])
+def apisearch():
+    searchType = request.form.get("type").lower()
+    print(searchType)
+    userinput = request.form.get("query").lower()
+    print(userinput)
+    userinput = f'%{userinput.lower()}%'
+    allBooks = getbooks(searchType, userinput)
+    # print(allBooks)
+    # allBooks_json = [{"isbn":'0380795272',"title":'Krondor: The Betrayal',"author":'Raymond E. Feist'}]
+    allBooks_json = [] 
 
-@app.route("/api/search", methods = ["POST"])
-def api_search():
-    if request.method == "POST":
-        content = request.get_json(force = True)
-        search = content["select"].strip()
-        searchbook = "%" + content["booksearch"].strip() + "%"
-        if search == "option1":
-            results = Books.query.filter(Books.author.like(searchbook)).all()
-        if search == "option2":
-            results = Books.query.filter(Books.isbn.like(searchbook)).all()
-        if search == "option3":
-            results = Books.query.filter(Books.title.like(searchbook)).all()
-        if results is not None:
-            search_results = []
-            for result in results:
-                details = {
-                 "ISBN" : result.isbn,
-                 "title" : result.tittle, 
-                 "Author" : result.author,
-                 }
-                search_results.append(details)
-            return jsonify({"success" : True, "results" : search_results})
-    return render_template("user.html")
+    for book in allBooks:
+        eachBook = {}
+        eachBook["isbn"] = book.isbn
+        eachBook["title"] = book.tittle
+        eachBook["author"] = book.author
+        allBooks_json.append(eachBook)
+    return jsonify({"allBooks":allBooks_json})
 
+
+@app.route("/api/bookpage",methods = ["POST"])
+def apibookpage():
+    isbn = request.form.get("isbn")
+    bookreturned = getbook(isbn) 
+    print(bookreturned[0],"tets")
+    Bookdetails = {}
+    Bookdetails["isbn"] = bookreturned[0].isbn
+    Bookdetails["title"] = bookreturned[0].tittle
+    Bookdetails["author"] = bookreturned[0].author
+    Bookdetails["year"] = bookreturned[0].year
+    return jsonify({"bookinfo":Bookdetails})
+
+@app.route("/api/review",methods = ["POST"])
+def apibookpagereview():
+   isbn = request.form.get("isbn")
+   total_reviews = db1.session.query(REVIEW).filter(REVIEW.isbn == isbn)
+   
+#    print(len(list(total_reviews)))
+   tot_reviews = {}
+   for i in total_reviews:
+       tot_reviews[i.username] = [i.review,i.rating] 
+   print(tot_reviews)
+   return jsonify({'total_review': tot_reviews})
+
+@app.route("/api/submit-review", methods = ["POST"])
+def submitReview():
+    rating = request.form.get('rating')
+    review = request.form.get('review')
+    isbn = request.form.get('isbn')
+    email = session['username']
+    # print(name)
+    r = REVIEW.query.filter_by(email = email, isbn = isbn).first()
+    # flag = review_present(name,isbn)
+    # print(r)
+    if r is None:
+        data = REVIEW(email = email, isbn = isbn, rating = rating, review = review)
+        db.session.add(data)
+        db.session.commit()
+        # return jsonify({'flag1': 'true'})
+        return jsonify({"email" : [True,email]})
+    return jsonify({'email': [False, email]})
 
 @app.route("/bookpage/<string:isbn_id>")
 def book_details(isbn_id):
@@ -195,6 +204,8 @@ def review():
         else:
             return render_template('bookpage.html',message = 'You have already given review',data=book, total_reviews=total_reviews,isbn = isbn)
     return render_template('bookpage.html',email = session['username'], message1 = 'review submitted succesfully.',data=book, total_reviews=total_reviews,isbn = isbn)
+
+
 
 @app.route("/logout")
 def logout(): 
