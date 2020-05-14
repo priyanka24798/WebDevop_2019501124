@@ -119,55 +119,25 @@ def search():
     return render_template("user.html")
 
 
-# @app.route('/api/search', methods =["POST"])
-# def api_search():
-#     if request.method == "POST":
-#         searchbook = request.form.get("search")
-#         result =  Books.query.filter(or_((Books.isbn.like('%'+ searchbook +'%')),(Books.tittle.like('%'+ searchbook +'%') ),(Books.author.like('%'+ searchbook +'%')))).all()
-    
-#         if (len(result)== 0) :
-#             return jsonify ({"ERROR": "BOOK NOT FOUND"}), 400
-        
-#         booktitle =[]
-#         bookisbn = []
-#         bookauthor=[]
-#         for record in result:
-#             booktitle.append(record.tittle)
-#             bookauthor.append(record.author)
-#             bookisbn.append(record.isbn)
-        
-#         json_results = {
-#             "ISBN" : bookisbn,
-#             "AUTHOR": bookauthor,
-#             "TITLE": booktitle,
-#         }
-#         print(json_results)
-#         return jsonify(json_results), 200
-#     return "<h1>Search again</h1>"
+@app.route("/api/search",methods = ["POST"])
+def apisearch():
+    searchType = request.form.get("type").lower()
+    print(searchType)
+    userinput = request.form.get("query").lower()
+    print(userinput)
+    userinput = f'%{userinput.lower()}%'
+    allBooks = getbooks(searchType, userinput)
+    # print(allBooks)
+    # allBooks_json = [{"isbn":'0380795272',"title":'Krondor: The Betrayal',"author":'Raymond E. Feist'}]
+    allBooks_json = [] 
 
-@app.route("/api/search", methods = ["POST"])
-def api_search():
-    if request.method == "POST":
-        content = request.get_json(force = True)
-        search = content["select"].strip()
-        searchbook = "%" + content["booksearch"].strip() + "%"
-        if search == "option1":
-            results = Books.query.filter(Books.author.like(searchbook)).all()
-        if search == "option2":
-            results = Books.query.filter(Books.isbn.like(searchbook)).all()
-        if search == "option3":
-            results = Books.query.filter(Books.title.like(searchbook)).all()
-        if results is not None:
-            search_results = []
-            for result in results:
-                details = {
-                 "ISBN" : result.isbn,
-                 "title" : result.tittle, 
-                 "Author" : result.author,
-                 }
-                search_results.append(details)
-            return jsonify({"success" : True, "results" : search_results})
-    return render_template("user.html")
+    for book in allBooks:
+        eachBook = {}
+        eachBook["isbn"] = book.isbn
+        eachBook["title"] = book.tittle
+        eachBook["author"] = book.author
+        allBooks_json.append(eachBook)
+    return jsonify({"allBooks":allBooks_json})
 
 
 @app.route("/bookpage/<string:isbn_id>")
