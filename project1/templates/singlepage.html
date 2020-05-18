@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>HomePage</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+        <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">         -->
+        <script>
+        var global_isbn;
+        document.addEventListener('DOMContentLoaded', ()=> {
+            var x = document.getElementById("review-part")
+            x.style.display = "none"
+            document.querySelector("#search-button").onclick = () => {
+                document.querySelector("#review-results").innerHTML = ""
+                const request = new XMLHttpRequest()
+                const type = document.querySelector(".form-type").value
+                const BookDetails = document.querySelector(".Bar").value
+                request.open('POST','/api/search')
+
+                const data = new FormData()
+                data.append('type',type)
+                data.append('query',BookDetails)
+                request.send(data)
+
+                request.onload = () => {
+                    const data = JSON.parse(request.responseText)
+                    console.log(data)
+                    
+                    if (data.allBooks.length === 0) {
+                        document.querySelector("#no-results").innerHTML = "No results"
+                        document.querySelector("#zoom-title").innerHTML = ""
+                        document.querySelector("#review-results").innerHTML = ""
+                        document.querySelector("#book").innerHTML = ""
+                        x.style.display = "none"
+                        
+                        return false
+                    } else {
+                        document.querySelector("#no-results").innerHTML = data.allBooks.length + ' books found'
+                        document.querySelector("#zoom-title").innerHTML = ""
+                        document.querySelector("#book").innerHTML = ""
+                        x.style.display = "none"
+                        for (key in data.allBooks) {
+                        const book = document.createElement("a");
+                        book.innerText = data.allBooks[key]["title"]
+                        book.setAttribute("href","#");
+                        
+                        let isbn_book = data.allBooks[key]["isbn"]
+                        //global_isbn = isbn_book
+                        book.onclick = () => {bookpage(isbn_book)};
+
+                        document.querySelector("#zoom-title").append(book)
+                        document.querySelector("#zoom-title").append(document.createElement('br'))
+                        }
+                    }
+                }
+                return false
+            }
+
+            function review(isbn) {
+                var x = document.getElementById("review-part")
+                x.style.display = "block"
+                document.querySelector("#review-results").innerHTML = ""
+                global_isbn = isbn
+                const request = new XMLHttpRequest()
+                request.open("POST", "/api/review")
+                const data = new FormData()
+                data.append('isbn',isbn)
+                request.send(data)
+                console.log("checking")
+                request.onload = () => {
+                    const data = JSON.parse(request.responseText)
+                    // console.log(data)
+                    
+                    var x = document.querySelector("#review-results")
+                    x.style.display="block"
+                    for (key in data.total_review) {
+                        
+                        const review = document.createElement("a");
+                        review.innerHTML = data.total_review[key][0]
+                        console.log(key)
+                        x.innerHTML += '<div class="review-box"><div class="review-user">'+key+'</div>' + '<div class="review-rating">'+
+                        data.total_review[key][1]+'</div>' + '<div class="review-review">' + data.total_review[key][0] + '</div></div>'
+
+                    }
+                    console.log("out=for", typeof(x))
+                    //document.getElementById("#review-results").innerHTML = x
+                    //submit_review(isbn)
+                }
+                return false
+            }
+
+        });
+
+            function submit_review() {
+            const request = new XMLHttpRequest()
+            var rating = 0
+            var x = document.getElementsByName("rating")
+            for (let i = 0; i < x.length; i++) {
+                if(x[i].checked === true) {
+                    rating = x[i].value
+                }
+            }
+            
+            const review = document.querySelector(".Review").value
+            
+            request.open("POST", "/api/submit-review")
+
+            const data = new FormData()
+            console.log(data)
+            data.append("isbn", global_isbn)
+            data.append("rating", rating)
+            data.append("review", review)
+            request.send(data)
+
+            request.onload = () => {
+                const data = JSON.parse(request.responseText)
+                console.log("submit checking")
+                console.log(data)
+                if (data.email[0] === true) {
+                    document.querySelector("#review-results").append("Your Review has been succesfully submitted")
+                    var x = document.querySelector("#review-results")
+                    x.innerHTML += '<div class="review-box"><div class="review-user">'+data.email[1] +'</div>' + '<div class="review-rating">'+rating+'</div>' + '<div class="review-review">' + review + '</div></div>'
+                    var x = document.getElementById("review-part")
+                    x.style.display = "none"
+                    
+                } else {
+                    console.log("in-else", rating)
+                    var x = document.getElementById("review-part")
+                    x.style.display = "none"
+                    
+                    
+                }
+            }
+            return false
+        }
+
+        </script>
+    </head>
+
+    <body class = "body_result">
+        <div id = "topBar" style="padding-bottom: 70px;">
+            <div id = "display_username"  style="float: left;padding-left: 15px;">welcome <span id = "userName">{{ name }}</span></div>
+            <div id = "logout" style="float: right;"><a href="{{ url_for('logout') }}">Logout</a></div>
+        </div>
+        <div class="container" >
+            <div class = "searchBar_result">
+                <form>
+                    <select class="form-type" name="type">
+                        <option value="isbn">Isbn</option>
+                        <option value="title">title</option>
+                        <option value="author">author</option>
+                    </select>
+                    <input type="search" class = "Bar" name="BookDetails" placeholder="BookDetails" value="{{ query }}" required>
+                    <button id = "search-button">search</button>
+                </form>
+                <p id="no-results"></p>
+                <div id="zoom-title">
+
+                </div>
+                
+            </div>
+            <div class="actual">
+                <div class= "BookPage" >
+                    <div id = "book" style="color:red;">
+                        
+                    </div>
+                </div>
+                
+                <div id="review-part" style="display:block";>
+                    <div id="rate">
+                        <input name = "rating" value = "1" id = "1"  type="radio" />1  
+                        <input name = "rating" value = "2" id = "2"  type="radio" />2 
+                        <input name = "rating" value = "3" id = "3"  type="radio" />3 
+                        <input name = "rating" value = "4" id = "4"  type="radio" />4 
+                        <input name = "rating" value = "5" id = "5"  type="radio" />5
+                    </div>
+                    <input type="search" id = "submit-review" class = "Review" name="Submit Review" placeholder="Submit Review" value="{{ inpt }}" required>
+                    
+                    <button onclick="submit_review()" id = "submit-button">submit</button>
+                </div>
+                <div id = "review-results"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
