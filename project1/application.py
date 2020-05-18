@@ -145,7 +145,35 @@ def api_search(search):
         "TITLE": booktitle,
     })
 
+@app.route("/api/review",methods = ["POST"])
+def apibookpagereview():
+   isbn = request.form.get("isbn")
+   total_reviews = db1.session.query(REVIEW).filter(REVIEW.isbn == isbn)
+   
+#    print(len(list(total_reviews)))
+   tot_reviews = {}
+   for i in total_reviews:
+       tot_reviews[i.username] = [i.review,i.rating] 
+   print(tot_reviews)
+   return jsonify({'total_review': tot_reviews})
 
+@app.route("/api/submit-review", methods = ["POST"])
+def submitReview():
+    rating = request.form.get('rating')
+    review = request.form.get('review')
+    isbn = request.form.get('isbn')
+    email = session['username']
+    # print(name)
+    r = REVIEW.query.filter_by(email = email, isbn = isbn).first()
+    # flag = review_present(name,isbn)
+    # print(r)
+    if r is None:
+        data = REVIEW(email = email, isbn = isbn, rating = rating, review = review)
+        db.session.add(data)
+        db.session.commit()
+        # return jsonify({'flag1': 'true'})
+        return jsonify({"email" : [True,email]})
+    return jsonify({"email": [False, email]})
 
 
 
